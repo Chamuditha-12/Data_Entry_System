@@ -2,7 +2,7 @@
 
 A simple PHP + MySQL based web application for entering and managing paper marks of students, with a public entry form and a secure admin dashboard.
 
-## 📌 Features
+## 📌 Features  (New)
 
 - Public form for paper markers to submit student marks (Index No, Group No, Part A & Part B marks, Marker name)
 - Duplicate index number prevention (UNIQUE constraint)
