@@ -36,7 +36,6 @@ Data_Entry_System/
 │ └── script.js
 ├── .gitignore
 └── README.md
-
 ``
 
 ## 🗄 Database
