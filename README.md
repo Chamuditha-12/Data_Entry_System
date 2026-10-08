@@ -16,7 +16,7 @@ A simple PHP + MySQL based web application for entering and managing paper marks
 
 ## 🗂 File Structure
 
-``
+```
 Data_Entry_System/
 │
 ├── config.php           # Database connection
@@ -36,7 +36,7 @@ Data_Entry_System/
 │ └── script.js
 ├── .gitignore
 └── README.md
-``
+```
 
 ## 🗄 Database
 
