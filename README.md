@@ -15,7 +15,6 @@ A simple PHP + MySQL based web application for entering and managing paper marks
 - Clean, responsive dashboard UI
 
 ## 🗂 File Structure
-
 ```
 Data_Entry_System/
 │
