@@ -1,0 +1,29 @@
+# Config file with DB credentials (if you separate secrets later)
+config.local.php
+.env
+
+# Composer (if used later)
+/vendor/
+composer.lock
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor/IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+error_log
+
+# Exported files (generated excel/csv exports)
+/exports/*.xlsx
+/exports/*.csv
+
+# PHP session files (if stored locally)
+sess_*
