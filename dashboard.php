@@ -56,6 +56,7 @@ $marker_counts = $conn->query("
   <div class="page">
     <div class="page-head">
       <div class="page-title">Marks <span class="accent">Dashboard</span></div>
+      <a href="export_excel.php" class="btn-export">⬇ Download Excel</a>
     </div>
 
     <div class="grid">
