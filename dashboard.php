@@ -27,6 +27,10 @@ $stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
 $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $entries = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$marker_counts = $conn->query("
+    SELECT marker_id, COUNT(*) as cnt FROM marks_entries GROUP BY marker_id
+")->fetchAll(PDO::FETCH_KEY_PAIR);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -146,6 +150,31 @@ $entries = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
 
     </div>
+
+    <div class="card" style="margin-top:24px;">
+      <div class="card-head">
+        <div class="card-title">Paper Markers</div>
+      </div>
+      <div class="card-sub">Only admins can manage marker names — these appear in the form dropdown</div>
+
+      <?php foreach ($markers as $marker): ?>
+      <div class="marker-row">
+        <div class="marker-info">
+          <div>
+            <div class="marker-name"><?php echo htmlspecialchars($marker['marker_name']); ?></div>
+            <div class="marker-meta"><?php echo $marker_counts[$marker['id']] ?? 0; ?> entries marked</div>
+          </div>
+        </div>
+        <a class="btn-remove" href="actions/delete_marker.php?id=<?php echo $marker['id']; ?>" onclick="return confirm('Remove this marker?')">✕ Remove</a>
+      </div>
+      <?php endforeach; ?>
+
+      <form class="add-marker" action="actions/add_marker.php" method="POST">
+        <input type="text" name="marker_name" placeholder="Enter new marker name" required>
+        <button type="submit" class="btn-add-marker">Add Marker</button>
+      </form>
+    </div>
+
   </div>
 
 </body>
