@@ -1,8 +1,8 @@
-# Config file with DB credentials (if you separate secrets later)
+# Config file with DB credentials
 config.local.php
 .env
 
-# Composer (if used later)
+# Composer
 /vendor/
 composer.lock
 
@@ -25,5 +25,5 @@ error_log
 /exports/*.xlsx
 /exports/*.csv
 
-# PHP session files (if stored locally)
+# PHP session files
 sess_*
