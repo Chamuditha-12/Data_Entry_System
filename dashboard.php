@@ -8,6 +8,25 @@ if (!isset($_SESSION['admin_id'])) {
 }
 
 $markers = $conn->query("SELECT id, marker_name FROM markers ORDER BY marker_name ASC")->fetchAll(PDO::FETCH_ASSOC);
+
+$per_page = 10;
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$offset = ($page - 1) * $per_page;
+
+$total_entries = $conn->query("SELECT COUNT(*) FROM marks_entries")->fetchColumn();
+$total_pages = ceil($total_entries / $per_page);
+
+$stmt = $conn->prepare("
+    SELECT me.*, m.marker_name
+    FROM marks_entries me
+    JOIN markers m ON me.marker_id = m.id
+    ORDER BY me.created_at DESC
+    LIMIT :limit OFFSET :offset
+");
+$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
+$entries = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -73,6 +92,57 @@ $markers = $conn->query("SELECT id, marker_name FROM markers ORDER BY marker_nam
           </div>
           <button type="submit" class="btn-primary">Save Entry</button>
         </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Form Entries</div>
+        </div>
+        <div class="card-sub">All submitted marks — edit or delete any row</div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Index No.</th>
+                <th>Group</th>
+                <th>Part A</th>
+                <th>Part B</th>
+                <th>Marker</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($entries as $row): ?>
+              <tr>
+                <td><span class="idx-badge"><?php echo htmlspecialchars($row['student_index']); ?></span></td>
+                <td><span class="grp-badge"><?php echo htmlspecialchars($row['group_number']); ?></span></td>
+                <td class="marks"><?php echo htmlspecialchars($row['part_a_marks']); ?></td>
+                <td class="marks"><?php echo htmlspecialchars($row['part_b_marks']); ?></td>
+                <td><?php echo htmlspecialchars($row['marker_name']); ?></td>
+                <td>
+                  <div class="actions">
+                    <button class="btn-icon btn-edit" onclick="location.href='edit_entry_form.php?id=<?php echo $row['id']; ?>'">✎ Edit</button>
+                    <a class="btn-icon btn-del" href="actions/delete_entry.php?id=<?php echo $row['id']; ?>" onclick="return confirm('Delete this entry?')">🗑 Delete</a>
+                  </div>
+                </td>
+              </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-foot">
+          <div class="foot-stat">Total entries: <b><?php echo $total_entries; ?></b></div>
+        </div>
+
+        <?php if ($total_pages > 1): ?>
+        <div class="pagination">
+          <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+            <a href="?page=<?php echo $i; ?>" class="<?php echo $i === $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
+          <?php endfor; ?>
+        </div>
+        <?php endif; ?>
       </div>
 
     </div>
